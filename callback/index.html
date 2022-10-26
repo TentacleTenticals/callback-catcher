@@ -2,30 +2,43 @@
 
 <html>
   <head>
+    <link rel="stylesheet" href="style.css">
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@1.22.2/build/global/luxon.min.js"></script>
   </head>
 
   <body style="background-image:url('https://i.imgur.com/RRqLlV7.png');" onload="callbackReceiver();">
+    <button onclick='document.location.href="https://callbackurl.jafia.repl.co"'>Вернуться на главную страницу</button>
    <form action='' method='dialog' onsubmit='sendData();' id='form'>
     <div>
-      <input type='password' id='access'> required</input>
+      <input type='password' id='access' autocomplete='off' required></input>
       <span>Access token</span>
     </div>
     <div>
-      <input type='password' id='refresh'> required</input>
+      <input type='password' id='refresh' autocomplete='off' required></input>
       <span>Refresh token</span>
     </div>
     <div>
-      <input type='password' id='album'></input>
+      <input type='password' id='album' autocomplete='off' required></input>
       <span>Album ID</span>
     </div>
-    <div>
-      <select name='host' id='host'>
-        <option value='Imgur' selected>Imgur</option>
-      </select>
-    </div>
-    <input type='submit'></input>
-  </form>
+    <input type='submit' value='Получить данные (в буфер обмена)'></input>
+  </form></br>
+  <fieldset>
+    <legend>Если вы не ввели ID существующего альбома Imgur, создайте альбом используя форму ниже</legend>
+    <form action='' method='dialog' onsubmit='createAlbum();' id='albumForm'>
+      <div>
+        <input type='text' id='albumName' autocomplete='off' required></input>
+        <span>Album name</span>
+      </div>
+      <div>
+        <input type='text' id='albumDesc' autocomplete='off' required></input>
+        <span>Album description</span>
+      </div>
+      <div>
+        <input type='submit' id='submitAlbum' value='Создать альбом'></input>
+      </div>
+    </form>
+  </fieldset>
   </body>
 </html>
