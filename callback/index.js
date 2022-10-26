@@ -1,4 +1,6 @@
 function callbackReceiver(){
+  let time = luxon.DateTime;
+console.log(time.local().setZone('Europe/Moscow').toISO())
   let imgurUrlFilter = /.+\?.+access_token=([^&]+).+refresh_token=([^&]+)&.+/gm;
   // alert('Runned, desu!');
   if(document.location.href.match(imgurUrlFilter)){
@@ -10,8 +12,9 @@ function callbackReceiver(){
   }
 };
 function sendData(){
+  let time = luxon.DateTime;
   let form = document.getElementById('form');
-  let a = [{access:form.children[0].children[0].value, refresh:form.children[1].children[0].value, album:form.children[2].children[0].value, host:form.children[3].children[0].value}]
+  let a = [{access:form.children[0].children[0].value, refresh:form.children[1].children[0].value, album:form.children[2].children[0].value, host:form.children[3].children[0].value, time:time.local().setZone('Europe/Moscow').toISO()}]
   // console.log(a);
   if(a) navigator.clipboard.writeText(a).then(res => {
     console.log('Скопировано, десу.');
