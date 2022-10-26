@@ -16,7 +16,7 @@ function sendData(){
   let form = document.getElementById('form');
   let a = [{access:form.children[0].children[0].value, refresh:form.children[1].children[0].value, album:form.children[2].children[0].value, host:form.children[3].children[0].value, time:time.local().toISO()}]
   // console.log(a);
-  if(a) navigator.clipboard.writeText(a).then(res => {
+  if(a) navigator.clipboard.writeText(JSON.stringify(a)).then(res => {
     console.log('Скопировано, десу.');
   })
 };
