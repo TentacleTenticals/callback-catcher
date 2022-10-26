@@ -8,6 +8,25 @@ console.log(time.local().setZone('Europe/Moscow').toISO())
       let form = document.getElementById('form');
       access ? form.children[0].children[0].value = access : '';
       refresh ? form.children[1].children[0].value = refresh : '';
+      
+      let formdata = new FormData()
+      formdata.append("title", 'DTF-album')
+      formData.append("description", 'DTF Альбом загруженных итемов')
+      fetch("https://api.imgur.com/3/album", {
+        method: "post",
+        headers: {
+            Authorization: `Bearer ${access}`
+        },
+        body: formdata
+      }).then(data => data.json()).then(res => {
+        console.log(res.data)
+        if(res.status === 200){
+          console.log(res.data)
+          // alert(res.data.link)
+//           form.children[2].children[0].value = data
+        }else
+        console.log(`Ошибка при создании альбома.`)
+      })
     })
   }
 };
