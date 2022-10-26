@@ -1,6 +1,4 @@
 function callbackReceiver(){
-  let time = luxon.DateTime;
-console.log(time.local().setZone('Europe/Moscow').toISO())
   let imgurUrlFilter = /.+\?.+access_token=([^&]+).+refresh_token=([^&]+)&.+/gm;
   // alert('Runned, desu!');
   if(document.location.href.match(imgurUrlFilter)){
@@ -8,65 +6,69 @@ console.log(time.local().setZone('Europe/Moscow').toISO())
       let form = document.getElementById('form');
       access ? form.children[0].children[0].value = access : '';
       refresh ? form.children[1].children[0].value = refresh : '';
-      
-      let formdata = new FormData()
-      formdata.append("title", 'DTF-album')
-      formdata.append("description", 'DTF Альбом загруженных итемов')
-      fetch("https://api.imgur.com/3/album", {
-        method: "post",
-        headers: {
-            Authorization: `Bearer ${access}`
-        },
-        body: formdata
-      }).then(data => data.json()).then(res => {
-        console.log(res.data)
-        if(res.status === 200){
-          console.log(res.data)
-          // alert(res.data.link)
-//           form.children[2].children[0].value = data
-        }else
-        console.log(`Ошибка при создании альбома.`)
-      })
     })
   }
 };
 function sendData(){
   let time = luxon.DateTime;
   let form = document.getElementById('form');
-  let a = [{access:form.children[0].children[0].value, refresh:form.children[1].children[0].value, album:form.children[2].children[0].value, host:form.children[3].children[0].value, time:time.local().toISO()}]
+  let a = [{access:form.children[0].children[0].value, refresh:form.children[1].children[0].value, time:time.local().setZone('Europe/Moscow').toISO(), album:form.children[2].children[0].value, host:'Imgur'}]
   // console.log(a);
   if(a) navigator.clipboard.writeText(JSON.stringify(a)).then(res => {
     console.log('Скопировано, десу.');
   })
 };
 
+function createAlbum(){
+  let form = document.getElementById('form');
+  let albumForm = document.getElementById('albumForm');
+  if(!form.children[0].children[0].value && !form.children[1].children[0].value) return;
+
+  let formData = new FormData()
+  formData.append("title", albumForm.children[0].children[0].value)
+  formData.append("description", albumForm.children[1].children[0].value)
+  fetch("https://api.imgur.com/3/album", {
+    method: "post",
+    headers: {
+        Authorization: `Bearer ${form.children[0].children[0].value}`
+    },
+    body: formData
+  }).then(data => data.json()).then(res => {
+    if(res.status === 200){
+      form.children[2].children[0].value = res.data.id;
+      albumForm.parentNode.disabled = true;
+    }else
+    console.log(`Ошибка при создании альбома.`)
+  })
+}
+
 
 class Imgur{
   constructor({path}){
-    this.main=document.createElement('form');
-    this.main.id='hostPickForm';
-    path.appendChild(this.form);
+    this.albumForm=document.createElement('form');
+    this.albumForm.id='albumForm';
+    path.appendChild(this.AlbumForm);
 
-    this.imgur=[
+    this.albumFormItems=[
       {
-        path: this.main,
-        type: 'password',
-        id: 'access',
-        text: 'Access token',
+        path: this.albumForm,
+        type: 'text',
+        id: 'albumName',
+        text: 'Название альбома',
         required: true
       },
       {
-        path: this.main,
-        type: 'password',
-        id: 'refresh',
-        text: 'Refresh token',
+        path: this.albumForm,
+        type: 'text',
+        id: 'albumDescription',
+        text: 'Описание альбома',
         required: true
       },
       {
-        path: this.main,
-        type: 'password',
-        id: 'album',
-        text: 'Album id',
+        path: this.albumForm,
+        type: 'submit',
+        id: 'submitAlbum',
+        value: 'Создать альбом',
         required: true
       }
     ].forEach(e => {
@@ -75,13 +77,14 @@ class Imgur{
         type: e.type,
         id: e.id,
         text: e.text,
+        value: e.value,
         required: e.required
       })
     })
   }
 }
 class Input{
-  constructor({path, text, id, type, complete, required}){
+  constructor({path, text, id, type, value, complete, required}){
     this.div=document.createElement('div');
     path.appendChild(this.div);
     
@@ -89,6 +92,7 @@ class Input{
     this.input.className=name;
     this.input.id=id;
     this.input.type=type;
+    value ? this.input.value=value : '';
     complete ? this.input.autocomplete=complete : '';
     required ? this.input.setAttribute('required', '') : '';
     this.div.appendChild(this.input);
