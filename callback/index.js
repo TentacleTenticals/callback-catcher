@@ -11,7 +11,7 @@ console.log(time.local().setZone('Europe/Moscow').toISO())
       
       let formdata = new FormData()
       formdata.append("title", 'DTF-album')
-      formData.append("description", 'DTF Альбом загруженных итемов')
+      formdata.append("description", 'DTF Альбом загруженных итемов')
       fetch("https://api.imgur.com/3/album", {
         method: "post",
         headers: {
