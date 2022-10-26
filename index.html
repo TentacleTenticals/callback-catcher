@@ -2,14 +2,19 @@
 
 <html>
   <head>
+    <link rel="stylesheet" href="index.css">
     <script src="index.js"></script>
   </head>
   <body style="background-image:url('https://i.imgur.com/RRqLlV7.png');">
-    <p>Пожалуйста, выберите хоста.</p>
-    <select name='host pick' id='hostPick' onchange='changed(this.value)'>
-      <option value='' selected></option>
-      <option value='Imgur'>Imgur</option>
-    </select>
+  <div class='header'>Добро пожаловать на страницу получения обратных вызовов (callback url)</div>
+    <button onclick='clearForm();'>Сбросить форму</button>
+    <p class='info' id='info'>Пожалуйста, выберите хоста.</p>
+    <form id='hostPick'>
+      <select name='host pick' onchange='changed(this)'>
+        <option value='' selected></option>
+        <option value='Imgur'>Imgur</option>
+      </select>
+    </form>
     <div id='mainForm'></div>
   </body>
 </html>
